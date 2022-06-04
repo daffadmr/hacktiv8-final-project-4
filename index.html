@@ -48,7 +48,6 @@
                 document.getElementById('temp').innerHTML = 'Temperature : '+data.main.temp+'°C';
                 document.getElementById('wind').innerHTML = 'Wind Speed : '+data.wind.speed+' m/s';
                 city.value = '';
-		alert('berhasil');
             })
             .catch(err => console.log(err));
         }
