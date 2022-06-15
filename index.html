@@ -1,14 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
     <title>Ramalan Cuaca</title>
     <link href="style.css" rel="stylesheet">
     <link href='https://fonts.googleapis.com/css?family=Nunito' rel='stylesheet'>
 </head>
+
 <body>
     <div class="ramalan">
         <div class="head">
@@ -29,46 +31,38 @@
     </div>
 </body>
 <script>
+    function temperatureConverter(valNum) {
+        valNum = parseFloat(valNum);
+        let outputCelcius = (valNum - 32) / 1.8;
+
+        return outputCelcius;
+    }
     // Fetch API Weather
-    function getData(){
+    function getData() {
         // Get City
         var city = document.getElementById('search');
         var city_name = city.value;
-        if(city_name == ''){
+        if (city_name == '') {
             city.focus();
             city.style.border = '1px solid red';
             return false;
-        }else{
-            fetch('http://api.openweathermap.org/data/2.5/weather?q='+city_name+',id&appid=8b63be45bf52079f2d1f9ed8f1bf70f7')
-            .then(response => response.json())
-            .then(data => {
-                console.log(data);
-                document.getElementById('city').innerHTML = 'City : '+data.name;
-                document.getElementById('conditions').innerHTML = 'Conditions : '+data.weather[0].description;
-                document.getElementById('temp').innerHTML = 'Temperature : '+data.main.temp+'°C';
-                document.getElementById('wind').innerHTML = 'Wind Speed : '+data.wind.speed+' m/s';
-                city.value = '';
-            })
-            .catch(err => console.log(err));
+        } else {
+            fetch('http://api.openweathermap.org/data/2.5/weather?q=' + city_name +
+                    ',id&appid=8b63be45bf52079f2d1f9ed8f1bf70f7')
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data);
+                    document.getElementById('city').innerHTML = 'City : ' + data.name;
+                    document.getElementById('conditions').innerHTML = 'Conditions : ' + data.weather[0].description;
+                    document.getElementById('temp').innerHTML = 'Temperature : ' + Math.trunc(data.main.temp -
+                            273.15) +
+                        '°C';
+                    document.getElementById('wind').innerHTML = 'Wind Speed : ' + data.wind.speed + ' m/s';
+                    city.value = '';
+                })
+                .catch(err => console.log(err));
         }
     }
-    // function getData(){
-    // Get City
-    // var city = document.getElementById('search');
-    // var city_name = city.value;
-    //     const url = 'http://api.openweathermap.org/data/2.5/weather?q='+city_name+',id&appid=8b63be45bf52079f2d1f9ed8f1bf70f7';
-    //     const xhr = new XMLHttpRequest();
-    //     xhr.open('POST', url, true);
-    //     xhr.onload = function(){
-    //         if(this.status === 200){
-    //             const data = JSON.parse(this.responseText);
-    //             console.log(data);
-    //             document.getElementById('conditions').innerHTML = data.weather[0].description;
-    //             document.getElementById('temp').innerHTML = data.main.temp;
-    //             document.getElementById('wind').innerHTML = data.wind.speed;
-    //         }
-    //     }
-    //     xhr.send();
-    // }
 </script>
+
 </html>
