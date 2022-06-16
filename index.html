@@ -8,11 +8,13 @@
     <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
     <title>Ramalan Cuaca</title>
     <link href="style.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
     <link href='https://fonts.googleapis.com/css?family=Nunito' rel='stylesheet'>
 </head>
 
 <body>
-    <div class="ramalan">
+    <div class="ramalan d-flex flex-column">
         <div class="head">
             <h1>Indonesia Weather Forecast</h1>
         </div>
@@ -21,27 +23,22 @@
                 <input class="input_kota" type="text" id="search" placeholder="City Name" autocomplete="off" required>
                 <button onclick="getData()" class="btn_cari">SUBMIT</button>
             </div>
-            <div class="hasil">
-                <p id="city"></p>
-                <p id="conditions"></p>
-                <p id="temp"></p>
-                <p id="wind"></p>
-            </div>
+            <div class="hasil pt-2"></div>
         </div>
     </div>
 </body>
 <script>
-    function temperatureConverter(valNum) {
-        valNum = parseFloat(valNum);
-        let outputCelcius = (valNum - 32) / 1.8;
+    const hasil = document.querySelector('.hasil');
+    const city = document.getElementById('search');
 
-        return outputCelcius;
+    function tidakKetemu() {
+        hasil.innerHTML = "<h1>The city doesn't exist</h1>"
+        city.value = ""
     }
     // Fetch API Weather
     function getData() {
         // Get City
-        var city = document.getElementById('search');
-        var city_name = city.value;
+        let city_name = city.value;
         if (city_name == '') {
             city.focus();
             city.style.border = '1px solid red';
@@ -51,7 +48,10 @@
                     ',id&appid=8b63be45bf52079f2d1f9ed8f1bf70f7')
                 .then(response => response.json())
                 .then(data => {
-                    console.log(data);
+                    hasil.innerHTML = `<p id="city"></p>
+                <p id="conditions"></p>
+                <p id="temp"></p>
+                <p id="wind"></p>`
                     document.getElementById('city').innerHTML = 'City : ' + data.name;
                     document.getElementById('conditions').innerHTML = 'Conditions : ' + data.weather[0].description;
                     document.getElementById('temp').innerHTML = 'Temperature : ' + Math.trunc(data.main.temp -
@@ -60,7 +60,7 @@
                     document.getElementById('wind').innerHTML = 'Wind Speed : ' + data.wind.speed + ' m/s';
                     city.value = '';
                 })
-                .catch(err => console.log(err));
+                .catch(err => tidakKetemu());
         }
     }
 </script>
